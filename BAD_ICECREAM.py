@@ -47,4 +47,5 @@ def make_GUI():
         pygame.display.update()
 
 make_GUI()
-print("Hallo Luka")
+
+#Hello Michi
