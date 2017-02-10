@@ -3,49 +3,57 @@ from pygame.locals import *
 
 #             R    G    B
 WHITE     = (255, 255, 255)
-SNOW       =(255,255,190)
 BLACK     = (  0,   0,   0)
 RED       = (255,   0,   0)
 GREEN     = (  0, 255,   0)
 BLUE      = (  0,   0, 255)
+HBLUE      =(150,150,255)
 DARKGRAY  = ( 40,  40,  40)
 
+class Monster:
+    def __init__(self):
+        pass
 
-def make_GUI():
-    FPS = 20
-    BOARD_LENGTH = 600
-    BOARD_HEIGHT = BOARD_LENGTH
-    Cellsize = BOARD_LENGTH/12
+class Fruits:
+    def __init__(self):
+        pass
 
-    pygame.init()
+class Spiel:
+    def __init__(self, groesse):
+        self.felder = [[0 for j in range(groesse)] for i in range(groesse)]
+
+        for i in range(groesse):
+            self.felder[0][i] = 1
+            self.felder[groesse-1][i] = 1
+            self.felder[i][0] = 1
+            self.felder[i][groesse-1] = 1
+
+def makeGUI():
+    FPS = 10
+    BOARD_HEIGHT = 665
+    BOARD_LENGTH = BOARD_HEIGHT
+    CELLSIZE = 35
 
     DISPLAYSURF = pygame.display.set_mode((BOARD_LENGTH, BOARD_HEIGHT))
-    pygame.display.set_caption('BAD ICECREAM')
+    pygame.display.set_caption('Bad Ice Cream')
 
-    DISPLAYSURF.fill(SNOW)
-    while True: # main game loop
-        for event in pygame.event.get():  # event handling loop
 
+    while True:  # main game loop
+        DISPLAYSURF.fill(HBLUE)
+
+        for event in pygame.event.get():
             if event.type == pygame.QUIT or (event.type == pygame.KEYUP and event.key == pygame.K_ESCAPE):
                 pygame.quit()
                 sys.exit()
-            elif event.type == pygame.KEYDOWN:
-                # Der Rote
-                if event.key == pygame.K_DOWN and \
-                                my_feld.felder[my_feld.der_rote[0] + 1][my_feld.der_rote[1]] == 0:
-                    my_feld.der_rote[0] += 1
-                elif event.key == pygame.K_UP and \
-                                my_feld.felder[my_feld.der_rote[0] - 1][my_feld.der_rote[1]] == 0:
-                    my_feld.der_rote[0] -= 1
-                elif event.key == pygame.K_LEFT and \
-                                my_feld.felder[my_feld.der_rote[0]][my_feld.der_rote[1] - 1] == 0:
-                    my_feld.der_rote[1] -= 1
-                elif event.key == pygame.K_RIGHT and \
-                                my_feld.felder[my_feld.der_rote[0]][my_feld.der_rote[1] + 1] == 0:
-                    my_feld.der_rote[1] += 1
+        else:
+            for x in range(0, BOARD_LENGTH, CELLSIZE):  # draw vertical lines
+                pygame.draw.line(DISPLAYSURF, DARKGRAY, (x, 0), (x, BOARD_HEIGHT))
+            for y in range(0, BOARD_HEIGHT, CELLSIZE):  # draw horizontal lines
+                pygame.draw.line(DISPLAYSURF, DARKGRAY, (0, y), (BOARD_LENGTH, y))
 
         pygame.display.update()
 
-make_GUI()
 
-#Hello Michi
+
+if __name__ == '__main__':
+    makeGUI()
