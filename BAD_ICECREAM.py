@@ -59,11 +59,39 @@ def makeGUI():
         DISPLAYSURF.fill(HBLUE)
 
         for event in pygame.event.get():
-            if event.type == pygame.QUIT or (event.type == pygame.KEYUP and event.key == pygame.K_ESCAPE):
-                pygame.quit()
-                sys.exit()
-            else:
-                pass
+
+                if event.type == pygame.QUIT or (event.type == pygame.KEYUP and event.key == pygame.K_ESCAPE):
+                    pygame.quit()
+                    sys.exit()
+                elif event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_w:
+                        if ice.richtung["dx"] == 0:
+                            ice.richtung["dx"] = -1
+                            ice.richtung["dy"] = 0
+                        elif ice.richtung["dx"] == 1:
+                            ice.richtung["dx"] == 0
+                            ice.richtung["dy"] = 0
+                    elif event.key == pygame.K_s:
+                        if ice.richtung["dx"] == -1:
+                            ice.richtung["dx"] = 0
+                            ice.richtung["dy"] = 0
+                        elif ice.richtung["dx"] == 0:
+                            ice.richtung["dx"] = 1
+                            ice.richtung["dy"] = 0
+                    elif event.key == pygame.K_a:
+                        if ice.richtung["dy"] == 0:
+                            ice.richtung["dy"] = -1
+                            ice.richtung["dx"] = 0
+                        elif ice.richtung["dy"] == 1:
+                            ice.richtung["dy"] = 0
+                            ice.richtung["dx"] = 0
+                    elif event.key == pygame.K_d:
+                        if ice.richtung["dy"] == -1:
+                            ice.richtung["dy"] = 0
+                            ice.richtung["dx"] = 0
+                        elif ice.richtung["dy"] == 0:
+                            ice.richtung["dy"] = 1
+                            ice.richtung["dx"] = 0
 
 
 
