@@ -1,5 +1,7 @@
 import random, pygame, sys
 from pygame.locals import *
+import random as rd
+
 #             R    G    B
 WHITE     = (255, 255, 255)
 BLACK     = (  0,   0,   0)
@@ -9,13 +11,20 @@ BLUE      = (  0,   0, 255)
 HBLUE      =(150,150,255)
 DARKGRAY  = ( 40,  40,  40)
 
+farbenliste=[GREEN, RED]
+
 class Monster:
     def __init__(self):
         pass
 
 class Fruits:
-    def __init__(self):
-        pass
+    def __init__(self, pos={'x': rd.randint(0, 30), 'y': rd.randint(0, 30)}):
+        self.koord = pos
+        self.farbe = rd.randint(1, len(farbenliste) - 1)
+
+    def zufallsfarbe(self):
+        return farbenliste[self.farbe]
+
 
 class Ice:
     def __init__(self):
@@ -28,9 +37,10 @@ class Spiel:
 
         for i in range(groesse):
             self.felder[0][i] = 1
-            self.felder[groesse - 1][i] = 1
+            self.felder[groesse-1][i] = 1
             self.felder[i][0] = 1
-            self.felder[i][groesse - 1] = 1
+            self.felder[i][groesse-1] = 1
+
 
 
 def makeGUI():
@@ -45,6 +55,7 @@ def makeGUI():
     CELLHEIGHT = int(BOARD_HEIGHT / CELLSIZE)
 
     ice=Ice()
+    fruits=Fruits()
 
     my_feld=Spiel(CELLSIZE)
 
@@ -63,6 +74,9 @@ def makeGUI():
                 if event.type == pygame.QUIT or (event.type == pygame.KEYUP and event.key == pygame.K_ESCAPE):
                     pygame.quit()
                     sys.exit()
+
+
+
                 elif event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_w:
                         if ice.richtung["dx"] == 0:
@@ -72,7 +86,7 @@ def makeGUI():
                             ice.richtung["dx"] == 0
                             ice.richtung["dy"] = 0
                     elif event.key == pygame.K_s:
-                        if ice.richtung["dx"] == -1:
+                        if ice.richtung["dx"] == 1:
                             ice.richtung["dx"] = 0
                             ice.richtung["dy"] = 0
                         elif ice.richtung["dx"] == 0:
@@ -103,9 +117,6 @@ def makeGUI():
         if my_feld.felder[ice.koord['x'] + ice.richtung['dx']][ice.koord['y'] + ice.richtung['dy']] == 0:
             ice.koord['x'] = ice.koord['x'] + ice.richtung['dx']
             ice.koord['y'] = ice.koord['y'] + ice.richtung['dy']
-        else:
-            my_feld.ice['dy'] = 0
-            my_feld.ice['dx'] = 0
 
         make_rectangle_ice(ice.koord, DISPLAYSURF, CELLSIZE)
 
