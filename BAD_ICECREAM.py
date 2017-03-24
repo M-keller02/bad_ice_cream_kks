@@ -11,114 +11,82 @@ BLUE      = (  0,   0, 255)
 HBLUE      =(150,150,255)
 DARKGRAY  = ( 40,  40,  40)
 
-farbenliste=[GREEN, RED]
 
-class Monster:
-    def __init__(self):
-        pass
+class Spielfeld:
+    def __init__(self, rastergroesse):
+        self.felder = [[0 for xr in range(rastergroesse)] for yr in range(rastergroesse)]
 
-class Fruits:
-    def __init__(self, pos={'x': rd.randint(0, 30), 'y': rd.randint(0, 30)}):
-        self.koord = pos
-        self.farbe = rd.randint(1, len(farbenliste) - 1)
-
-    def zufallsfarbe(self):
-        return farbenliste[self.farbe]
-
-
-class Ice:
-    def __init__(self):
-        self.koord={"x":1,"y":1}
-        self.richtung={"dx":0,"dy":0}
-
-class Spiel:
-    def __init__(self, groesse):
-        self.felder = [[0 for j in range(groesse)] for i in range(groesse)]
-
-        for i in range(groesse):
+        for i in range(rastergroesse):
             self.felder[0][i] = 1
-            self.felder[groesse-1][i] = 1
+            self.felder[rastergroesse-1][i] = 1
             self.felder[i][0] = 1
-            self.felder[i][groesse-1] = 1
+            self.felder[i][rastergroesse-1] = 1
 
+        self.spieler1 = [16, 15]
 
 
 def makeGUI():
     FPS = 10
-    BOARD_HEIGHT = 665
-    BOARD_LENGTH = BOARD_HEIGHT
-    CELLSIZE = 35
+    #Zellenangaben und Board
+    cellx = 18
+    celly = cellx
+    cellsize = 40
+    length = cellx * cellsize
+    height = celly * cellsize
+    my_feld = Spielfeld(cellx)
 
-    assert BOARD_LENGTH % CELLSIZE == 0
-    assert BOARD_HEIGHT % CELLSIZE == 0
-    CELLWIDTH = int(BOARD_LENGTH / CELLSIZE)
-    CELLHEIGHT = int(BOARD_HEIGHT / CELLSIZE)
 
-    ice=Ice()
-    fruits=Fruits()
+    #Spielfigur laden
+    player = pygame.image.load('Spieler_t.png')
 
-    my_feld=Spiel(CELLSIZE)
 
 
     pygame.init()
     FPSCLOCK=pygame.time.Clock()
-    DISPLAYSURF = pygame.display.set_mode((BOARD_LENGTH, BOARD_HEIGHT))
+    DISPLAYSURF = pygame.display.set_mode((length, height))
     pygame.display.set_caption('Bad Ice Cream')
 
 
-    while True:  # main game loop
-        DISPLAYSURF.fill(HBLUE)
+    while True:
+        DISPLAYSURF.fill(WHITE)
 
         for event in pygame.event.get():
+            if event.type == QUIT or (event.type == KEYUP and event.key == K_ESCAPE):
+                pygame.quit()
+                sys.exit()
 
-                if event.type == pygame.QUIT or (event.type == pygame.KEYUP and event.key == pygame.K_ESCAPE):
-                    pygame.quit()
-                    sys.exit()
-
-
-
-                elif event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_w:
-                        if ice.richtung["dx"] == 0:
-                            ice.richtung["dx"] = -1
-                            ice.richtung["dy"] = 0
-                        elif ice.richtung["dx"] == 1:
-                            ice.richtung["dx"] == 0
-                            ice.richtung["dy"] = 0
-                    elif event.key == pygame.K_s:
-                        if ice.richtung["dx"] == 1:
-                            ice.richtung["dx"] = 0
-                            ice.richtung["dy"] = 0
-                        elif ice.richtung["dx"] == 0:
-                            ice.richtung["dx"] = 1
-                            ice.richtung["dy"] = 0
-                    elif event.key == pygame.K_a:
-                        if ice.richtung["dy"] == 0:
-                            ice.richtung["dy"] = -1
-                            ice.richtung["dx"] = 0
-                        elif ice.richtung["dy"] == 1:
-                            ice.richtung["dy"] = 0
-                            ice.richtung["dx"] = 0
-                    elif event.key == pygame.K_d:
-                        if ice.richtung["dy"] == -1:
-                            ice.richtung["dy"] = 0
-                            ice.richtung["dx"] = 0
-                        elif ice.richtung["dy"] == 0:
-                            ice.richtung["dy"] = 1
-                            ice.richtung["dx"] = 0
+            elif event.type == KEYDOWN:
+                if (event.key == K_d or event.key == K_RIGHT) and  \
+                                my_feld.felder[my_feld.spieler1[0]][my_feld.spieler1[1] + 1] == 0:
+                         my_feld.spieler1[1] += 1
+                elif (event.key == K_a or event.key == K_LEFT) and \
+                                my_feld.felder[my_feld.spieler1[0]][my_feld.spieler1[1] - 1] == 0:
+                    my_feld.spieler1[1] -= 1
+                elif (event.key == K_w or event.key == K_UP) and \
+                                my_feld.felder[my_feld.spieler1[0] - 1][my_feld.spieler1[1]] == 0:
+                    my_feld.spieler1[0] -= 1
+                elif (event.key == K_s or event.key == K_DOWN) and \
+                                my_feld.felder[my_feld.spieler1[0] + 1][my_feld.spieler1[1]] == 0:
+                    my_feld.spieler1[0] += 1
 
 
+        #Gitterlinien
+        for x in range(0, length, cellsize):
+            pygame.draw.line(DISPLAYSURF, BLACK, (x,0),(x,length))
 
-        for x in range(0, BOARD_LENGTH, CELLSIZE):
-            pygame.draw.line(DISPLAYSURF, BLACK, (x, 0), (x, BOARD_HEIGHT))
-        for y in range(0, BOARD_HEIGHT, CELLSIZE):
-            pygame.draw.line(DISPLAYSURF, BLACK, (0, y), (BOARD_LENGTH, y))
+        for y in range(0, height, cellsize):
+            pygame.draw.line(DISPLAYSURF, BLACK, (0, y),(height,y))
 
-        if my_feld.felder[ice.koord['x'] + ice.richtung['dx']][ice.koord['y'] + ice.richtung['dy']] == 0:
-            ice.koord['x'] = ice.koord['x'] + ice.richtung['dx']
-            ice.koord['y'] = ice.koord['y'] + ice.richtung['dy']
+        # Rand
+        for i in range(len(my_feld.felder)):
+            for j in range(len(my_feld.felder[i])):
+                if my_feld.felder[i][j] == 1:
+                    x, y = board_to_pixel_koord(i,j, cellsize)
+                    feld = pygame.Rect(x, y, cellsize, cellsize)
+                    pygame.draw.rect(DISPLAYSURF, BLACK, feld)
 
-        make_rectangle_ice(ice.koord, DISPLAYSURF, CELLSIZE)
+        DISPLAYSURF.blit(player, board_to_pixel_koord(my_feld.spieler1[0], my_feld.spieler1[1], cellsize))
+
 
         pygame.display.update()
         FPSCLOCK.tick(FPS)
