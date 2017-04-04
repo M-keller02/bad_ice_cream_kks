@@ -8,7 +8,6 @@ BLACK     = (  0,   0,   0)
 RED       = (255,   0,   0)
 GREEN     = (  0, 255,   0)
 BLUE      = (  0,   0, 255)
-HBLUE      =(150,150,255)
 DARKGRAY  = ( 40,  40,  40)
 
 
@@ -46,6 +45,7 @@ def makeGUI():
     DISPLAYSURF = pygame.display.set_mode((length, height))
     pygame.display.set_caption('Bad Ice Cream')
 
+    pygame.key.set_repeat(50, 50)
 
     while True:
         DISPLAYSURF.fill(WHITE)
