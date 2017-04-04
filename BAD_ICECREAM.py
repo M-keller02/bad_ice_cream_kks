@@ -21,7 +21,8 @@ class Spielfeld:
             self.felder[i][0] = 1
             self.felder[i][rastergroesse-1] = 1
 
-        self.spieler1 = [16, 15]
+        self.spieler = [16, 15]
+        self.frucht =[10, 10]
 
 
 def makeGUI():
@@ -37,6 +38,10 @@ def makeGUI():
 
     #Spielfigur laden
     player = pygame.image.load('Spieler_t.png')
+
+    #Frucht laden
+    fruit=pygame.image.load("peach.png")
+
 
 
 
@@ -57,17 +62,17 @@ def makeGUI():
 
             elif event.type == KEYDOWN:
                 if (event.key == K_d or event.key == K_RIGHT) and  \
-                                my_feld.felder[my_feld.spieler1[0]][my_feld.spieler1[1] + 1] == 0:
-                         my_feld.spieler1[1] += 1
+                                my_feld.felder[my_feld.spieler[0]][my_feld.spieler[1] + 1] == 0:
+                         my_feld.spieler[1] += 1
                 elif (event.key == K_a or event.key == K_LEFT) and \
-                                my_feld.felder[my_feld.spieler1[0]][my_feld.spieler1[1] - 1] == 0:
-                    my_feld.spieler1[1] -= 1
+                                my_feld.felder[my_feld.spieler[0]][my_feld.spieler[1] - 1] == 0:
+                    my_feld.spieler[1] -= 1
                 elif (event.key == K_w or event.key == K_UP) and \
-                                my_feld.felder[my_feld.spieler1[0] - 1][my_feld.spieler1[1]] == 0:
-                    my_feld.spieler1[0] -= 1
+                                my_feld.felder[my_feld.spieler[0] - 1][my_feld.spieler[1]] == 0:
+                    my_feld.spieler[0] -= 1
                 elif (event.key == K_s or event.key == K_DOWN) and \
-                                my_feld.felder[my_feld.spieler1[0] + 1][my_feld.spieler1[1]] == 0:
-                    my_feld.spieler1[0] += 1
+                                my_feld.felder[my_feld.spieler[0] + 1][my_feld.spieler[1]] == 0:
+                    my_feld.spieler[0] += 1
 
 
         #Gitterlinien
@@ -85,7 +90,10 @@ def makeGUI():
                     feld = pygame.Rect(x, y, cellsize, cellsize)
                     pygame.draw.rect(DISPLAYSURF, BLACK, feld)
 
-        DISPLAYSURF.blit(player, board_to_pixel_koord(my_feld.spieler1[0], my_feld.spieler1[1], cellsize))
+        #Spieler auf Spielfeld generieren
+        DISPLAYSURF.blit(player, board_to_pixel_koord(my_feld.spieler[0], my_feld.spieler[1], cellsize))
+        #Frucht auf Spielfeld generieren
+        DISPLAYSURF.blit(fruit, board_to_pixel_koord(my_feld.frucht[0], my_feld.frucht[1],cellsize))
 
 
         pygame.display.update()
