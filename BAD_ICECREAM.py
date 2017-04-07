@@ -26,7 +26,6 @@ class Spielfeld:
         self.frucht2=[5,1]
         self.feind=[10,10]
 
-
 def makeGUI():
     FPS = 10
     #Zellenangaben und Board
@@ -47,6 +46,12 @@ def makeGUI():
     #gegner laden
     enemy=pygame.image.load("feind.png")
 
+    #boden laden
+    floor=pygame.image.load("boden.png")
+
+    #wand laden
+    wall=pygame.image.load("wand.png")
+
 
 
     pygame.init()
@@ -58,6 +63,11 @@ def makeGUI():
 
     eaten_fruit=0
     feind_kill=0
+    positions_walls = [[0,0],[0,1],[0,2],[0,3],[0,4],[0,5],[0,6],[0,7],[0,8],[0,9],[0,10],[0,11],[0,12],[0,13],[0,14],[0,15],[0,16],[0,17],[0,18],
+                       [1,0],[2,0],[3,0],[4,0],[5,0],[6,0],[7,0],[8,0],[9,0],[10,0],[11,0],[12,0],[13,0],[14,0],[15,0],[16,0],[17,0],[18,0],
+                       [1,17],[2,17],[3,17],[4,17],[5,17],[6,17],[7,17],[8,17],[9,17],[10,17],[11,17],[12,17],[13,17],[14,17],[15,17],[16,17],[17,17],
+                       [17,1],[17,2],[17,3],[17,4],[17,5],[17,6],[17,7],[17,8],[17,9],[17,10],[17,11],[17,12],[17,13],[17,14],[17,15],[17,16],[17,17]]
+
 
     while True:
         DISPLAYSURF.fill(WHITE)
@@ -109,15 +119,11 @@ def makeGUI():
 
         for y in range(0, height, cellsize):
             pygame.draw.line(DISPLAYSURF, BLACK, (0, y),(height,y))
+        #Boden
+        draw_ground(floor, cellsize, DISPLAYSURF)
+        #Wand
+        draw_walls(positions_walls, wall, cellsize, DISPLAYSURF)
 
-
-        # Rand
-        for i in range(len(my_feld.felder)):
-            for j in range(len(my_feld.felder[i])):
-                if my_feld.felder[i][j] == 1:
-                    x, y = board_to_pixel_koord(i,j, cellsize)
-                    feld = pygame.Rect(x, y, cellsize, cellsize)
-                    pygame.draw.rect(DISPLAYSURF, BLACK, feld)
 
         #Spieler auf Spielfeld generieren
         DISPLAYSURF.blit(player, board_to_pixel_koord(my_feld.spieler[0], my_feld.spieler[1], cellsize))
@@ -126,6 +132,8 @@ def makeGUI():
         DISPLAYSURF.blit(fruit, board_to_pixel_koord(my_feld.frucht2[0], my_feld.frucht2[1], cellsize))
         #Gegener auf Spielfeld generieren
         DISPLAYSURF.blit(enemy, board_to_pixel_koord(my_feld.feind[0], my_feld.feind[1], cellsize))
+
+
 
         if eaten_fruit == 2:
             DISPLAYSURF.fill(GREEN)
@@ -140,6 +148,15 @@ def makeGUI():
 
 def board_to_pixel_koord(i, j, width):
     return j * width, i * width
+
+#Boden
+def draw_ground(picture, zellgroesse, DISPLAYSURF):
+    DISPLAYSURF.blit(picture, board_to_pixel_koord(0, 0, zellgroesse))
+
+#Wand
+def draw_walls(positions, picture, zellgroesse, DISPLAYSURF):
+    for i in range (0,(len(positions))):
+        DISPLAYSURF.blit(picture, board_to_pixel_koord(positions[i][0], positions[i][1], zellgroesse))
 
 
 def make_rectangle_ice(dict, display, size):
