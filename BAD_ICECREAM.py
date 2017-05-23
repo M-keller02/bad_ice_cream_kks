@@ -85,7 +85,6 @@ def makeMenu(Status):
         DISPLAYSURF.fill(DARKGRAY, text_rect_2)
         DISPLAYSURF.blit(text_1, text_rect_1)
         DISPLAYSURF.blit(text_2, text_rect_2)
-
         for event in pygame.event.get():
             if event.type == QUIT or (event.type == KEYUP and event.key == K_ESCAPE):
                 pygame.quit()
