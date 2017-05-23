@@ -22,21 +22,28 @@ class Spielfeld:
             self.felder[i][0] = 1
             self.felder[i][rastergroesse-1] = 1
 
-        self.spieler = [15, 15]
+        self.spieler = [14, 14]
         self.frucht =[13, 10]
         self.frucht2=[5,1]
         self.feind=[10,10]
 
-positions_walls = [[0, 0], [0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [0, 7], [0, 8], [0, 9], [0, 10], [0, 11],
+positions_walls_level1= [[0, 0], [0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [0, 7], [0, 8], [0, 9], [0, 10], [0, 11],
                     [0, 12], [0, 13], [0, 14], [0, 15], [0, 16], [0, 17], [0, 18],
                     [1, 0], [2, 0], [3, 0], [4, 0], [5, 0], [6, 0], [7, 0], [8, 0], [9, 0], [10, 0], [11, 0],
                     [12, 0], [13, 0], [14, 0], [15, 0], [16, 0], [17, 0], [18, 0],
                     [1, 17], [2, 17], [3, 17], [4, 17], [5, 17], [6, 17], [7, 17], [8, 17], [9, 17], [10, 17],
                     [11, 17], [12, 17], [13, 17], [14, 17], [15, 17], [16, 17], [17, 17],
                     [17, 1], [17, 2], [17, 3], [17, 4], [17, 5], [17, 6], [17, 7], [17, 8], [17, 9], [17, 10],
-                    [17, 11], [17, 12], [17, 13], [17, 14], [17, 15], [17, 16], [17, 17]]
+                    [17, 11], [17, 12], [17, 13], [17, 14], [17, 15], [17, 16], [17, 17],[2,2]]
 
-
+positions_walls_level2= [[0, 0], [0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [0, 7], [0, 8], [0, 9], [0, 10], [0, 11],
+                    [0, 12], [0, 13], [0, 14], [0, 15], [0, 16], [0, 17], [0, 18],
+                    [1, 0], [2, 0], [3, 0], [4, 0], [5, 0], [6, 0], [7, 0], [8, 0], [9, 0], [10, 0], [11, 0],
+                    [12, 0], [13, 0], [14, 0], [15, 0], [16, 0], [17, 0], [18, 0],
+                    [1, 17], [2, 17], [3, 17], [4, 17], [5, 17], [6, 17], [7, 17], [8, 17], [9, 17], [10, 17],
+                    [11, 17], [12, 17], [13, 17], [14, 17], [15, 17], [16, 17], [17, 17],
+                    [17, 1], [17, 2], [17, 3], [17, 4], [17, 5], [17, 6], [17, 7], [17, 8], [17, 9], [17, 10],
+                    [17, 11], [17, 12], [17, 13], [17, 14], [17, 15], [17, 16], [17, 17],[15,15]]
 # Spielfigur laden
 player = pygame.image.load('Spieler_t.png')
 # Frucht laden
@@ -48,20 +55,15 @@ floor = pygame.image.load("hint.jpg")
 # wand laden
 wall = pygame.image.load("wand.png")
 
+menu=pygame.image.load("menu.jpg")
 
 
-def makeMenu():
+
+def makeMenu(Status):
     FPS = 10
-    cellx = 18
-    celly = cellx
-    cellsize = 40
-    length = cellx * cellsize
-    height = celly * cellsize
-    my_feld = Spielfeld(cellx)
-
     pygame.init()
     FPSCLOCK = pygame.time.Clock()
-    DISPLAYSURF = pygame.display.set_mode((length, height))
+    DISPLAYSURF = pygame.display.set_mode((720, 720))
     pygame.display.set_caption('Bad Ice Cream')
 
     pygame.key.set_repeat(50, 50)
@@ -76,12 +78,14 @@ def makeMenu():
     text_rect_1.center = (175, 300)
     text_rect_2.center = (525, 300)
 
+
     while True:
         DISPLAYSURF.fill(DARKGRAY)
         DISPLAYSURF.fill(DARKGRAY, text_rect_1)
         DISPLAYSURF.fill(DARKGRAY, text_rect_2)
         DISPLAYSURF.blit(text_1, text_rect_1)
         DISPLAYSURF.blit(text_2, text_rect_2)
+
         for event in pygame.event.get():
             if event.type == QUIT or (event.type == KEYUP and event.key == K_ESCAPE):
                 pygame.quit()
@@ -89,20 +93,18 @@ def makeMenu():
             elif event.type == MOUSEBUTTONDOWN:
                 x, y = event.pos
                 if x > 75 and x < 275 and y < 325 and y > 275:
-                    makeGUI()
+                    pygame.quit()
                     return (1)
                 elif x > 425 and x < 625 and y < 325 and y > 275:
-                    makeGUI()
+                    pygame.quit()
                     return (2)
-
                     pygame.quit()
                     sys.exit()
-
         pygame.display.update()
         FPSCLOCK.tick(FPS)
 
 
-def makeGUI():
+def makeGUI(Level):
     FPS = 10
     cellx = 18
     celly = cellx
@@ -114,15 +116,15 @@ def makeGUI():
     FPSCLOCK = pygame.time.Clock()
     DISPLAYSURF = pygame.display.set_mode((length, height))
     pygame.display.set_caption('Bad Ice Cream')
-
     pygame.key.set_repeat(50, 50)
+
 # Schrift
     font = pygame.font.SysFont('comicsansms', 72)
     font2 = pygame.font.SysFont('comicsansms', 36)
     text = font.render('GAME OVER!', True, BLACK)
     text2 = font2.render('PRESS ESC TO QUIT', True, BLACK)
     text3 = font.render('LEVEL COMPLETED!', True, BLACK)
-    text4 = font2.render('PRESS R TO RESTART', True, BLACK)
+    text4 = font2.render('PRESS R TO RESTART OR M FOR THE MENU', True, BLACK)
     textRect = text.get_rect()
     textRect2 = text2.get_rect()
     textRect3 = text3.get_rect()
@@ -136,6 +138,11 @@ def makeGUI():
 
     eaten_fruit=0
     feind_kill=0
+
+    if Level==1:
+        positions_walls=positions_walls_level1
+    elif Level==2:
+        positions_walls=positions_walls_level2
 
 
     while True:
@@ -228,16 +235,14 @@ def makeGUI():
                     if event.type == QUIT or (event.type == KEYUP and event.key == K_ESCAPE):
                         pygame.quit()
                         sys.exit()
-                        if event.type == KEYDOWN:
-                            if event.key == pygame.K_r:
-                                makeGUI(Level, positions_fruits)
-
-
+                    if event.type == KEYDOWN:
+                        if event.key == pygame.K_r:
+                            makeGUI(Level)
+                        elif event.key==pygame.K_m:
+                            makeMenu(Level)
 
         pygame.display.update()
         FPSCLOCK.tick(FPS)
-
-
 
 
 def board_to_pixel_koord(i, j, width):
@@ -247,7 +252,7 @@ def board_to_pixel_koord(i, j, width):
 def draw_ground(picture, zellgroesse, DISPLAYSURF):
     DISPLAYSURF.blit(picture, board_to_pixel_koord(0, 0, zellgroesse))
 
-#Wand
+#Wand aussen
 def draw_walls(positions, picture, zellgroesse, DISPLAYSURF):
     for i in range (0,(len(positions))):
         DISPLAYSURF.blit(picture, board_to_pixel_koord(positions[i][0], positions[i][1], zellgroesse))
@@ -290,4 +295,7 @@ def make_rectangle_ice(dict, display, size):
 
 
 if __name__ == '__main__':
-    makeMenu()
+    v=True
+    while (v==1):
+        Level= makeMenu(1)
+        v=makeGUI(Level)
