@@ -160,7 +160,6 @@ def makeGUI(Level,Fruit):
     textRect3.center = (length / 2, height / 2 - 20)
     textRect4.center = (length / 2, height / 2 + 75)
 
-
 #Variabeln
     eat_fruit= 0
     if Level==1:
